@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>스타크래프트 스타일 디펜스</title>
+    <title>STARCRAFT DEFENSE</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
@@ -11,68 +11,131 @@
     <div id="game-wrapper">
         <div id="game-container">
             <canvas id="gameCanvas" width="800" height="600"></canvas>
-            
+
             <div id="ui-panel">
-                <div id="stats" class="panel-section">
-                    <p class="stat-line">자원: <span id="money">100</span> M</p>
-                    <p class="stat-line">기지 체력: <span id="lives">20</span></p>
-                    <p class="stat-line">웨이브: <span id="wave">1</span></p>
-                    <p class="stat-line">점수: <span id="score">0</span></p>
+
+                <!-- Header -->
+                <div id="ui-header">
+                    <span class="header-title">STARCRAFT DEFENSE</span>
+                    <span class="header-sub">v2.0</span>
                 </div>
-                
-                <div id="build-menu" class="panel-section">
-                    <h3>유닛 생산 (Build)</h3>
+
+                <!-- Stats -->
+                <div class="panel-section" id="stats">
+                    <div class="stat-grid">
+                        <div class="stat-block">
+                            <span class="stat-label">MINERALS</span>
+                            <span class="stat-value mineral" id="money">150</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">BASE HP</span>
+                            <span class="stat-value lives" id="lives">20</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">WAVE</span>
+                            <span class="stat-value wave-val" id="wave">0</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">SCORE</span>
+                            <span class="stat-value" id="score">0</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">KILLS</span>
+                            <span class="stat-value kills" id="kill-count">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Build Menu -->
+                <div class="panel-section" id="build-menu">
+                    <div class="section-header">BUILD  <span class="hotkey-hint">[1-5]</span></div>
                     <div class="tower-btn" data-type="marine" data-cost="20">
                         <div class="icon marine-icon"></div>
                         <div class="tower-info">
-                            <span class="t-name">마린 ($20)</span>
-                            <span class="t-desc">빠른 연사, 기본 유닛</span>
+                            <span class="t-name">마린 <span class="cost-badge">20M</span></span>
+                            <span class="t-desc">연사형 기본 보병 [1]</span>
                         </div>
                     </div>
                     <div class="tower-btn" data-type="firebat" data-cost="35">
                         <div class="icon firebat-icon"></div>
                         <div class="tower-info">
-                            <span class="t-name">파이어뱃 ($35)</span>
-                            <span class="t-desc">스플래시 근거리 공격</span>
+                            <span class="t-name">파이어뱃 <span class="cost-badge">35M</span></span>
+                            <span class="t-desc">근거리 스플래시 [2]</span>
                         </div>
                     </div>
                     <div class="tower-btn" data-type="ghost" data-cost="45">
                         <div class="icon ghost-icon"></div>
                         <div class="tower-info">
-                            <span class="t-name">고스트 ($45)</span>
-                            <span class="t-desc">원거리 저격, 단일 데미지</span>
+                            <span class="t-name">고스트 <span class="cost-badge">45M</span></span>
+                            <span class="t-desc">원거리 저격수 [3]</span>
                         </div>
                     </div>
                     <div class="tower-btn" data-type="tank" data-cost="90">
                         <div class="icon tank-icon"></div>
                         <div class="tower-info">
-                            <span class="t-name">시즈탱크 ($90)</span>
-                            <span class="t-desc">장거리 넓은 스플래시</span>
+                            <span class="t-name">시즈탱크 <span class="cost-badge">90M</span></span>
+                            <span class="t-desc">광역 포격 최강 [4]</span>
                         </div>
                     </div>
                     <div class="tower-btn" data-type="turret" data-cost="40">
                         <div class="icon turret-icon"></div>
                         <div class="tower-info">
-                            <span class="t-name">미사일 터렛 ($40)</span>
-                            <span class="t-desc">공중 유닛 전용 최강</span>
+                            <span class="t-name">미사일터렛 <span class="cost-badge">40M</span></span>
+                            <span class="t-desc">대공 전용 고속 [5]</span>
                         </div>
                     </div>
                 </div>
 
-                <div id="controls" class="panel-section">
-                    <button id="start-wave-btn">명령 대기중... (Next Wave)</button>
+                <!-- Tower Info / Select -->
+                <div class="panel-section" id="tower-panel">
+                    <div class="section-header">SELECTED TOWER</div>
+                    <div id="tower-info">
+                        <span class="info-placeholder">타워를 클릭하여 선택하세요</span>
+                    </div>
+                    <div id="targeting-panel" style="display:none;">
+                        <div class="section-sub">TARGETING MODE</div>
+                        <div class="target-row">
+                            <button class="target-btn active" data-mode="first">FIRST</button>
+                            <button class="target-btn" data-mode="nearest">NEAR</button>
+                            <button class="target-btn" data-mode="strongest">STRONG</button>
+                        </div>
+                    </div>
+                    <button id="upgrade-btn" style="display:none;" class="action-btn upgrade-btn">UPGRADE [U]</button>
+                    <button id="sell-btn" style="display:none;" class="action-btn sell-btn">SELL [S]</button>
                 </div>
-                
+
+                <!-- Controls -->
+                <div class="panel-section" id="controls">
+                    <button id="start-wave-btn">[ NEXT WAVE ] (Space)</button>
+                    <button id="speed-btn" class="speed-btn">SPEED x1</button>
+                </div>
+
+                <!-- Message -->
                 <div id="message-box">
-                    <p id="msg-text">환영합니다 사령관님. 적들의 침공이 예상됩니다. 방어선을 구축하십시오!</p>
+                    <span class="msg-prefix">&gt;</span>
+                    <span id="msg-text">환영합니다 사령관님. 적들의 침공이 예상됩니다. 방어선을 구축하십시오!</span>
                 </div>
+
+                <!-- Hotkey reference -->
+                <div id="hotkeys">
+                    <span>ESC: 취소</span>
+                    <span>U: 업그레이드</span>
+                    <span>S: 판매</span>
+                </div>
+
             </div>
         </div>
-        
+
+        <!-- Game Over -->
         <div id="game-over" class="hidden">
-            <h1>MISSION FAILED</h1>
-            <p>기지가 파괴되었습니다...</p>
-            <button id="restart-btn">다시 시작 (Restart)</button>
+            <div class="go-title">MISSION FAILED</div>
+            <div class="go-sub">기지가 파괴되었습니다</div>
+            <div class="go-stats">
+                <div class="go-stat-row"><span>도달 웨이브</span><span id="final-wave">-</span></div>
+                <div class="go-stat-row"><span>최종 점수</span><span id="final-score">-</span></div>
+                <div class="go-stat-row"><span>총 처치수</span><span id="final-kills">-</span></div>
+            </div>
+            <button id="restart-btn">RESTART MISSION</button>
         </div>
     </div>
 
