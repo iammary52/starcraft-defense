@@ -23,27 +23,36 @@ export function loadAssets(callback) {
             callback();
         }
     };
+    const onError = () => {
+        console.error("Failed to load an image.");
+        onLoad(); // Proceed anyway
+    };
 
-    Images.marine.src = '../assets/images/marine.png';
+    Images.marine.src = 'assets/images/marine.png';
     Images.marine.onload = onLoad;
+    Images.marine.onerror = onError;
 
-    Images.tank.src = '../assets/images/tank.png';
+    Images.tank.src = 'assets/images/tank.png';
     Images.tank.onload = onLoad;
+    Images.tank.onerror = onError;
 
-    Images.zergling.src = '../assets/images/zergling.png';
+    Images.zergling.src = 'assets/images/zergling.png';
     Images.zergling.onload = onLoad;
+    Images.zergling.onerror = onError;
 
-    Images.hydra.src = '../assets/images/hydra.png';
+    Images.hydra.src = 'assets/images/hydra.png';
     Images.hydra.onload = onLoad;
+    Images.hydra.onerror = onError;
 
-    Images.bg.src = '../assets/images/bg.png';
+    Images.bg.src = 'assets/images/bg.png';
     Images.bg.onload = onLoad;
+    Images.bg.onerror = onError;
 
     // Reuse marine for firebat/ghost tint or just use marine image since it's terran infantry
-    Images.firebat.src = '../assets/images/marine.png';
-    Images.ghost.src = '../assets/images/marine.png';
-    Images.turret.src = '../assets/images/tank.png';
+    Images.firebat.src = 'assets/images/marine.png';
+    Images.ghost.src = 'assets/images/marine.png';
+    Images.turret.src = 'assets/images/tank.png';
 
-    Images.muta.src = '../assets/images/hydra.png';
-    Images.ultra.src = '../assets/images/zergling.png';
+    Images.muta.src = 'assets/images/hydra.png';
+    Images.ultra.src = 'assets/images/zergling.png';
 }
