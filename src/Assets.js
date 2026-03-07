@@ -28,25 +28,27 @@ export function loadAssets(callback) {
         onLoad(); // Proceed anyway
     };
 
-    Images.marine.src = 'assets/images/marine.png';
+    console.log("Starting asset load...");
+
     Images.marine.onload = onLoad;
     Images.marine.onerror = onError;
+    Images.marine.src = 'assets/images/marine.png';
 
-    Images.tank.src = 'assets/images/tank.png';
     Images.tank.onload = onLoad;
     Images.tank.onerror = onError;
+    Images.tank.src = 'assets/images/tank.png';
 
-    Images.zergling.src = 'assets/images/zergling.png';
     Images.zergling.onload = onLoad;
     Images.zergling.onerror = onError;
+    Images.zergling.src = 'assets/images/zergling.png';
 
-    Images.hydra.src = 'assets/images/hydra.png';
     Images.hydra.onload = onLoad;
     Images.hydra.onerror = onError;
+    Images.hydra.src = 'assets/images/hydra.png';
 
-    Images.bg.src = 'assets/images/bg.png';
     Images.bg.onload = onLoad;
     Images.bg.onerror = onError;
+    Images.bg.src = 'assets/images/bg.png';
 
     // Reuse marine for firebat/ghost tint or just use marine image since it's terran infantry
     Images.firebat.src = 'assets/images/marine.png';
