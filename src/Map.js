@@ -1,3 +1,5 @@
+import { Images } from './Assets.js';
+
 export class MapManager {
     constructor(width, height, cellSize) {
         this.width = width;
@@ -51,8 +53,18 @@ export class MapManager {
     }
 
     draw(ctx) {
-        // Draw path lines on background
-        ctx.strokeStyle = '#2d2d2d';
+        // Draw background texture
+        if (Images.bg && Images.bg.complete) {
+            const pattern = ctx.createPattern(Images.bg, 'repeat');
+            ctx.fillStyle = pattern;
+            ctx.fillRect(0, 0, this.width, this.height);
+        } else {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, this.width, this.height);
+        }
+
+        // Draw path lines (dirt road or mechanical path)
+        ctx.strokeStyle = 'rgba(20, 20, 20, 0.7)'; // semi-transparent dark path
         ctx.lineWidth = this.cellSize * 1.5;
         ctx.lineCap = 'butt';
         ctx.lineJoin = 'miter';
@@ -66,7 +78,7 @@ export class MapManager {
 
         // Path border
         ctx.strokeStyle = '#4af626';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1;
         ctx.setLineDash([10, 5]);
         ctx.stroke();
         ctx.setLineDash([]);

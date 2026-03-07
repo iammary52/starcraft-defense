@@ -1,4 +1,5 @@
 import { getDistance } from './Utils.js';
+import { Images } from './Assets.js';
 
 export class Enemy {
     constructor(type, waveNumber, waypoints) {
@@ -19,6 +20,9 @@ export class Enemy {
 
         // Visual effects
         this.hitTime = 0;
+
+        // Face moving direction
+        this.angle = 0;
     }
 
     setupStats(type, waveNum) {
@@ -27,36 +31,31 @@ export class Enemy {
             case 'zergling':
                 this.maxHp = 20 * hpScaling;
                 this.speed = 1.5;
-                this.color = '#e67e22'; // Orange/Brown
-                this.size = 10;
+                this.size = 12;
                 this.reward = 5;
                 break;
             case 'hydra':
                 this.maxHp = 60 * hpScaling;
                 this.speed = 1.0;
-                this.color = '#8e44ad'; // Purple
-                this.size = 14;
+                this.size = 16;
                 this.reward = 10;
                 break;
             case 'muta':
                 this.maxHp = 45 * hpScaling;
                 this.speed = 1.8;
-                this.color = '#2980b9'; // Blue, flying
-                this.size = 12;
+                this.size = 18;
                 this.reward = 12;
                 break;
             case 'ultra':
                 this.maxHp = 250 * hpScaling;
                 this.speed = 0.6;
-                this.color = '#7f8c8d'; // Grey/Huge
-                this.size = 20;
+                this.size = 28;
                 this.reward = 30;
                 break;
             default:
                 this.maxHp = 30;
                 this.speed = 1;
-                this.color = '#fff';
-                this.size = 10;
+                this.size = 12;
                 this.reward = 5;
         }
     }
@@ -90,6 +89,7 @@ export class Enemy {
         } else {
             const dx = target.x - this.x;
             const dy = target.y - this.y;
+            this.angle = Math.atan2(dy, dx);
             this.x += (dx / dist) * this.speed;
             this.y += (dy / dist) * this.speed;
         }
@@ -100,34 +100,24 @@ export class Enemy {
 
         ctx.save();
         ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle + Math.PI / 2); // assuming the top-down image faces UP naturally
 
-        // draw different shapes
-        ctx.beginPath();
-        if (this.type === 'zergling') {
-            ctx.arc(0, 0, this.size, 0, Math.PI * 2);
-        } else if (this.type === 'hydra') {
-            ctx.moveTo(0, -this.size);
-            ctx.lineTo(this.size, this.size);
-            ctx.lineTo(-this.size, this.size);
-            ctx.closePath();
-        } else if (this.type === 'muta') {
-            ctx.moveTo(-this.size, -this.size);
-            ctx.lineTo(this.size, 0);
-            ctx.lineTo(-this.size, this.size);
-            ctx.closePath();
-        } else if (this.type === 'ultra') {
-            ctx.rect(-this.size, -this.size * 0.7, this.size * 2, this.size * 1.4);
-        } else {
-            ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+        let img = Images[this.type];
+        if (img && img.complete) {
+            const renderSize = this.size * 2;
+            ctx.drawImage(img, -renderSize / 2, -renderSize / 2, renderSize, renderSize);
+
+            if (Date.now() - this.hitTime < 100) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.fillRect(-renderSize / 2, -renderSize / 2, renderSize, renderSize);
+            }
         }
 
-        // Check if recently hit
-        if (Date.now() - this.hitTime < 100) {
-            ctx.fillStyle = '#fff'; // Flash white
-        } else {
-            ctx.fillStyle = this.color;
-        }
-        ctx.fill();
+        // Restore context before drawing HP bar so it isn't rotated
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(this.x, this.y);
 
         // HP Bar
         const hpPercent = this.currentHp / this.maxHp;

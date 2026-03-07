@@ -27,10 +27,6 @@ body {
 
 canvas {
     background-color: #1a1a1a;
-    background-image: 
-        linear-gradient(rgba(74, 246, 38, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(74, 246, 38, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
     border-right: 4px solid #304739;
     cursor: crosshair;
 }
@@ -50,7 +46,8 @@ canvas {
     border-bottom: 2px dashed #1a4d29;
 }
 
-.panel-section:last-child, #message-box {
+.panel-section:last-child,
+#message-box {
     border-bottom: none;
 }
 
@@ -102,13 +99,38 @@ canvas {
     margin-right: 15px;
     border-radius: 5px;
     flex-shrink: 0;
+    background-size: cover;
+    background-position: center;
+    background-color: transparent;
 }
 
-.marine-icon { background: #3498db; }
-.firebat-icon { background: #e74c3c; border-radius: 20px; }
-.ghost-icon { background: #9b59b6; border-radius: 50%; }
-.tank-icon { background: #7f8c8d; border-radius: 2px; border: 2px solid #333; }
-.turret-icon { background: #f1c40f; clip-path: polygon(50% 0%, 100% 100%, 0% 100%); }
+.marine-icon {
+    background-image: url('assets/images/marine.png');
+    border: 1px solid #304739;
+}
+
+.firebat-icon {
+    background-image: url('assets/images/marine.png');
+    filter: hue-rotate(320deg);
+    border: 1px solid #304739;
+}
+
+.ghost-icon {
+    background-image: url('assets/images/marine.png');
+    filter: hue-rotate(270deg);
+    border: 1px solid #304739;
+}
+
+.tank-icon {
+    background-image: url('assets/images/tank.png');
+    border: 1px solid #304739;
+}
+
+.turret-icon {
+    background-image: url('assets/images/tank.png');
+    filter: sepia(1) hue-rotate(30deg);
+    border: 1px solid #304739;
+}
 
 .tower-info {
     display: flex;

@@ -1,6 +1,9 @@
 import { Game } from './Game.js';
+import { loadAssets } from './Assets.js';
 
 window.addEventListener('load', () => {
-    const game = new Game('gameCanvas');
-    game.init();
+    loadAssets(() => {
+        const game = new Game('gameCanvas');
+        game.init();
+    });
 });
