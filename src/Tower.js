@@ -1,5 +1,6 @@
 import { getDistance } from './Utils.js';
 import { Images } from './Assets.js';
+import { Sound } from './Sound.js';
 
 const TOWER_CONFIGS = {
     marine:  { range: 100, fireRate: 500,  damage: 10,  color: '#3498db', effect: 'normal',  cost: 20 },
@@ -122,6 +123,15 @@ export class Tower {
             speed,
             this.effect
         ));
+
+        // 발사 효과음
+        switch (this.type) {
+            case 'marine':  Sound.playMarineShoot(); break;
+            case 'firebat': Sound.playFirebatShoot(); break;
+            case 'ghost':   Sound.playGhostShoot(); break;
+            case 'tank':    Sound.playTankShoot(); break;
+            case 'turret':  Sound.playTurretShoot(); break;
+        }
     }
 
     draw(ctx) {

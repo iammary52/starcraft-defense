@@ -507,6 +507,38 @@ canvas {
     box-shadow: 0 0 15px rgba(238, 34, 34, 0.3);
 }
 
+/* ===== SOUND CONTROLS ===== */
+.sound-controls {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.sound-btn {
+    flex: 1;
+    padding: 5px 4px;
+    background: #060e06;
+    color: #2a6a2a;
+    border: 1px solid #1a3a1a;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+}
+
+.sound-btn:hover {
+    border-color: #3a8a3a;
+    color: #4af626;
+}
+
+.sound-btn.active {
+    background: #0d200d;
+    border-color: #4af626;
+    color: #4af626;
+    box-shadow: 0 0 6px rgba(74, 246, 38, 0.2) inset;
+}
+
 /* ===== UTILITIES ===== */
 .hidden {
     display: none !important;
