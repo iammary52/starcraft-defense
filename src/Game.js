@@ -3,6 +3,7 @@ import { Tower } from './Tower.js';
 import { Enemy } from './Enemy.js';
 import { Bullet } from './Bullet.js';
 import { ParticleSystem } from './Particles.js';
+import { Sound } from './Sound.js';
 
 export class Game {
     constructor(canvasId) {
@@ -55,6 +56,7 @@ export class Game {
     }
 
     init() {
+        Sound.init();
         this.bindEvents();
         this.updateUI();
         this.loop();
@@ -68,6 +70,7 @@ export class Game {
         });
 
         this.canvas.addEventListener('click', () => {
+            Sound.resume();
             if (this.selectedTowerType) {
                 this.buildTower();
             } else {
@@ -98,6 +101,7 @@ export class Game {
         });
 
         document.getElementById('start-wave-btn').addEventListener('click', () => {
+            Sound.resume();
             if (!this.isWaveActive && !this.gameOver) {
                 this.startNextWave();
             }
@@ -131,6 +135,22 @@ export class Game {
 
         document.getElementById('restart-btn').addEventListener('click', () => {
             window.location.reload();
+        });
+
+        document.getElementById('music-btn').addEventListener('click', () => {
+            Sound.resume();
+            const on = Sound.toggleMusic();
+            const btn = document.getElementById('music-btn');
+            btn.textContent = on ? '♪ BGM' : '♪ BGM ✕';
+            btn.classList.toggle('active', on);
+        });
+
+        document.getElementById('sfx-btn').addEventListener('click', () => {
+            Sound.resume();
+            const on = Sound.toggleSfx();
+            const btn = document.getElementById('sfx-btn');
+            btn.textContent = on ? '♦ SFX' : '♦ SFX ✕';
+            btn.classList.toggle('active', on);
         });
 
         // Keyboard shortcuts
@@ -198,6 +218,7 @@ export class Game {
 
         this.particles.addExplosion(this.selectedTower.x, this.selectedTower.y, '#00ff88', 10);
         this.particles.addFloatingText(this.selectedTower.x, this.selectedTower.y - 20, `+${val}M`, '#00ff88');
+        Sound.playSell();
 
         this.towers.splice(this.towers.indexOf(this.selectedTower), 1);
         this.selectedTower = null;
@@ -222,6 +243,7 @@ export class Game {
         this.selectedTower.upgrade();
         this.particles.addExplosion(this.selectedTower.x, this.selectedTower.y, '#00ffff', 14);
         this.particles.addFloatingText(this.selectedTower.x, this.selectedTower.y - 24, `LV${this.selectedTower.level}!`, '#00ffff');
+        Sound.playUpgrade();
         this.showMessage(`업그레이드 완료! Lv${this.selectedTower.level}`);
         this.updateUI();
         this.updateTowerInfo();
@@ -289,6 +311,8 @@ export class Game {
         this.waveKills = 0;
         this.isWaveActive = true;
         this.waveAnnounce = { text: `-- WAVE ${this.wave} --`, alpha: 1.0, timer: Date.now() };
+        Sound.playWaveStart();
+        if (this.wave === 1) Sound.startMusic();
         this.showMessage(`웨이브 ${this.wave} 시작! 방어선을 강화하십시오!`);
         const btn = document.getElementById('start-wave-btn');
         btn.textContent = '[ IN COMBAT ]';
@@ -334,6 +358,7 @@ export class Game {
                     row * this.cellSize + this.cellSize / 2,
                     '#4af626', 10
                 );
+                Sound.playBuild();
                 this.updateUI();
                 this.showMessage(`${this.getTowerName(this.selectedTowerType.type)} 건설 완료!`);
                 document.querySelectorAll('.tower-btn').forEach(b => b.classList.remove('selected'));
@@ -403,6 +428,7 @@ export class Game {
             if (enemy.escaped) {
                 this.lives--;
                 this.addScreenShake(6);
+                Sound.playAlert();
                 this.enemies.splice(i, 1);
                 this.updateUI();
                 this.showMessage(`경보! 적이 기지를 통과했습니다! 기지 체력: ${this.lives}`);
@@ -422,6 +448,7 @@ export class Game {
                     `+${enemy.reward}M`,
                     '#00ff88'
                 );
+                Sound.playEnemyDeath();
 
                 if (enemy.type === 'ultra') this.addScreenShake(10);
                 if (enemy.type === 'hydra') this.addScreenShake(3);
@@ -457,6 +484,7 @@ export class Game {
             const bonus = 20 + this.wave * 5;
             this.money += bonus;
             this.score += bonus * 5;
+            Sound.playWaveComplete();
             this.updateUI();
             this.showMessage(`WAVE ${this.wave} CLEAR! 처치: ${this.waveKills} | 보너스: +${bonus}M`);
 
@@ -573,6 +601,8 @@ export class Game {
 
     triggerGameOver() {
         this.gameOver = true;
+        Sound.stopMusic();
+        Sound.playGameOver();
         const el = document.getElementById('game-over');
         document.getElementById('final-wave').textContent = this.wave;
         document.getElementById('final-score').textContent = this.score;
